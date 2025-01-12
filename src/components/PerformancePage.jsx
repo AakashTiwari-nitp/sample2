@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 
@@ -42,20 +42,44 @@ function PerformancePage() {
     },
   };
 
+  const [activeTab, setActiveTab] = useState("Overview");
+
+  const tabs = [
+    "Overview",
+    "Fundamentals",
+    "News Insights",
+    "Sentiments",
+    "Team",
+    "Technicals",
+    "Tokenomics",
+  ];
+
   return (
     <div className="font-sans p-5 bg-white">
       {/* Tabs */}
-      <div className="flex gap-5 mb-5">
-        {["Overview", "Fundamentals", "News Insights", "Sentiments", "Team", "Technicals", "Tokenomics"].map((tab, idx) => (
-          <button
-            key={idx}
-            className={`px-5 py-2 rounded ${
-              idx === 0 ? "bg-blue-600 text-white" : "bg-gray-100 text-black"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className="w-full border-b border-gray-200">
+        {/* Scrollable container for tabs */}
+        <div className="overflow-x-auto">
+          <div className="flex min-w-max gap-8 px-2">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`
+                py-4 px-1 text-sm font-medium relative
+                ${
+                  activeTab === tab
+                    ? "text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
+                }
+                transition-colors duration-200
+              `}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Performance Section */}
@@ -63,75 +87,72 @@ function PerformancePage() {
       <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-5">
         {/* Today's Low and 52W Low */}
         <div className="flex flex-col w-full space-y-4">
-  {/* Line 1: Today's Low */}
-  <div className="flex flex-col w-full">
-    <div className="flex items-center w-full">
-      <span className="text-gray-600">Today's Low</span>
-    </div>
-    <div className="flex items-center w-full">
-    <span className="ml-2 font-bold text-black">$46,930.22</span>
-      <div className="relative flex-1 mx-4 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 rounded">
-        <span className="absolute top-[-10px] left-[60%] transform -translate-x-1/2 font-bold text-black">
-          $48,637.83
-        </span>
-      </div>
-    </div>
-  </div>
+          {/* Line 1: Today's Low */}
+          <div className="flex flex-col w-full">
+            <div className="flex items-center w-full">
+              <span className="text-gray-600">Today's Low</span>
+            </div>
+            <div className="flex items-center w-full">
+              <span className="ml-2 font-bold text-black">$46,930.22</span>
+              <div className="relative flex-1 mx-4 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 rounded">
+                <span className="absolute top-[-10px] left-[60%] transform -translate-x-1/2 font-bold text-black">
+                  $48,637.83
+                </span>
+              </div>
+            </div>
+          </div>
 
-  {/* Line 2: 52W Low */}
-  <div className="flex flex-col w-full">
-    <div className="flex items-center w-full">
-      <span className="text-gray-600">52W Low</span>
-    </div>
-    <div className="flex items-center w-full">
-    <span className="ml-2 font-bold text-black">$46,930.22</span>
-      <div className="relative flex-1 mx-4 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 rounded">
-        
-      </div>
-    </div>
-  </div>
-</div>
-
+          {/* Line 2: 52W Low */}
+          <div className="flex flex-col w-full">
+            <div className="flex items-center w-full">
+              <span className="text-gray-600">52W Low</span>
+            </div>
+            <div className="flex items-center w-full">
+              <span className="ml-2 font-bold text-black">$46,930.22</span>
+              <div className="relative flex-1 mx-4 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 rounded"></div>
+            </div>
+          </div>
+        </div>
 
         {/* High values */}
         <div className="flex flex-col space-y-4">
-  {/* Today's High */}
-  <div className="flex flex-col">
-    <span className="text-gray-600">Today's High</span>
-    <span className="ml-2 font-bold text-black">$46,930.22</span>
-  </div>
+          {/* Today's High */}
+          <div className="flex flex-col">
+            <span className="text-gray-600">Today's High</span>
+            <span className="ml-2 font-bold text-black">$46,930.22</span>
+          </div>
 
-  {/* 52W High */}
-  <div className="flex flex-col">
-    <span className="text-gray-600">52W High</span>
-    <span className="ml-2 font-bold text-black">$46,930.22</span>
-  </div>
-</div>
-
+          {/* 52W High */}
+          <div className="flex flex-col">
+            <span className="text-gray-600">52W High</span>
+            <span className="ml-2 font-bold text-black">$46,930.22</span>
+          </div>
+        </div>
       </div>
 
       {/* Fundamentals Section */}
       <h2 className="text-2xl font-bold mb-4 text-black">Fundamentals</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-  {[
-    { title: "Bitcoin Price", value: "$16,815.46" },
-    { title: "24h Low / 24h High", value: "$16,382.07 / $16,874.12" },
-    { title: "7d Low / 7d High", value: "$16,382.07 / $16,874.12" },
-    { title: "Trading Volume", value: "$23,249,202,782" },
-    { title: "Market Cap", value: "$323,507,290,047" },
-    { title: "Market Cap Rank", value: "#1" },
-    { title: "All-Time High", value: "$69,044.77 (Nov 10, 2021)" },
-    { title: "All-Time Low", value: "$67.81 (Jul 06, 2013)" },
-  ].map((fundamental, idx) => (
-    <div key={idx} className="p-4 border rounded shadow-sm bg-white">
-      <div className="text-sm text-gray-600 border-b pb-1">{fundamental.title}</div>
-      <div className="font-bold text-lg">{fundamental.value}</div>
-    </div>
-  ))}
-</div>
-
-
-     
+        {[
+          { title: "Bitcoin Price", value: "$16,815.46" },
+          { title: "24h Low / 24h High", value: "$16,382.07 / $16,874.12" },
+          { title: "7d Low / 7d High", value: "$16,382.07 / $16,874.12" },
+          { title: "Trading Volume", value: "$23,249,202,782" },
+          { title: "Market Cap", value: "$323,507,290,047" },
+          { title: "Market Cap Rank", value: "#1" },
+          { title: "All-Time High", value: "$69,044.77 (Nov 10, 2021)" },
+          { title: "All-Time Low", value: "$67.81 (Jul 06, 2013)" },
+        ].map((fundamental, idx) => (
+          <div key={idx} className="p-4 border rounded shadow-sm bg-white">
+            <div className="text-sm text-gray-600 border-b pb-1">
+              {fundamental.title}
+            </div>
+            <div className="font-bold text-[#111827] text-lg">
+              {fundamental.value}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

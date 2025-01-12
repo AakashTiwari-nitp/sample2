@@ -5,20 +5,21 @@ import Chart from "chart.js/auto";
 
 function TradingViewWidget() {
   const [chartData, setChartData] = useState(null);
-  const [interval, setInterval] = useState("30"); // Default interval (30 days)
+  const [interval, setInterval] = useState("30");
 
   useEffect(() => {
     const fetchBitcoinData = async () => {
       try {
-        // Fetch historical market data for Bitcoin based on selected interval
         const response = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${interval}&interval=daily`
         );
         const data = await response.json();
 
-        // Process the data for the chart
         const labels = data.prices.map((price) =>
-          new Date(price[0]).toLocaleDateString("en-US", { day: "numeric", month: "long" })
+          new Date(price[0]).toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+          })
         );
         const prices = data.prices.map((price) => price[1]);
 
@@ -29,15 +30,14 @@ function TradingViewWidget() {
               label: "Bitcoin Price (USD)",
               data: prices,
               borderColor: "#0052FE",
-              backgroundColor: "rgba(0, 0, 255, 0.1)", // Shaded area color
+              backgroundColor: "rgba(0, 0, 255, 0.1)",
               tension: 0.3,
-              borderWidth: 2, // Line width
-              pointRadius: 0, // Remove the circles at each data point
-              // Add shadow properties here
+              borderWidth: 2,
+              pointRadius: 0,
               shadowOffsetX: 3,
               shadowOffsetY: 3,
               shadowBlur: 5,
-              shadowColor: "rgba(0, 0, 255, 0.4)", // Light shadow around the line
+              shadowColor: "rgba(0, 0, 255, 0.4)",
             },
           ],
         });
@@ -47,47 +47,56 @@ function TradingViewWidget() {
     };
 
     fetchBitcoinData();
-  }, [interval]); // Fetch new data whenever interval changes
+  }, [interval]);
+
+  const timeIntervals = [
+    { label: "1 H", value: "1" },
+    { label: "24 H", value: "1" },
+    { label: "7 D", value: "7" },
+    { label: "1 M", value: "30" },
+    { label: "1 Y", value: "365" },
+  ];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column", // To stack the chart and buttons vertically
-        padding: "20px",
-        backgroundColor: "white", // Background color
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        height: "100vh", // Take up full height
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "10px",
-          marginBottom: "20px",
-        }}
-      >
-        <button onClick={() => setInterval("1")} style={buttonStyle}>1 H</button>
-        <button onClick={() => setInterval("1")} style={buttonStyle}>24 H</button>
-        <button onClick={() => setInterval("7")} style={buttonStyle}>7 D</button>
-        <button onClick={() => setInterval("30")} style={buttonStyle}>1 M</button>
-        <button onClick={() => setInterval("365")} style={buttonStyle}>1 Y</button>
+    <div className="flex flex-col items-center w-full min-h-screen p-4 md:p-6 bg-white rounded-lg shadow-md">
+      {/* Time interval buttons */}
+      <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-4 md:mb-6 w-full max-w-2xl">
+        {timeIntervals.map((time) => (
+          <button
+            key={time.label}
+            onClick={() => setInterval(time.value)}
+            className={`
+              px-3 py-2 md:px-4 md:py-2 
+              text-xs md:text-sm
+              rounded
+              transition-colors
+              ${interval === time.value 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }
+            `}
+          >
+            {time.label}
+          </button>
+        ))}
       </div>
+
+      {/* Chart container */}
       {chartData ? (
-        <div style={{ width: "90%", height: "600px" }}>
+        <div className="w-full h-[300px] md:h-[400px] lg:h-[600px]">
           <Line
             data={chartData}
             options={{
               responsive: true,
+              maintainAspectRatio: false,
               plugins: {
                 legend: {
                   position: "top",
                   labels: {
-                    color: "#000", // Legend text color
+                    color: "#000",
+                    font: {
+                      size: window.innerWidth < 768 ? 10 : 12
+                    }
                   },
                 },
               },
@@ -96,21 +105,27 @@ function TradingViewWidget() {
                   title: {
                     display: true,
                     text: "",
-                    color: "#000", // Axis label color
+                    color: "#000",
                   },
                   ticks: {
-                    color: "#000", // Tick text color
-                    maxTicksLimit: 5, // Limit the number of ticks to ~5
+                    color: "#000",
+                    maxTicksLimit: window.innerWidth < 768 ? 4 : 5,
+                    font: {
+                      size: window.innerWidth < 768 ? 10 : 12
+                    }
                   },
                 },
                 y: {
                   title: {
                     display: true,
                     text: "Price (USD)",
-                    color: "#000", // Axis label color
+                    color: "#000",
                   },
                   ticks: {
-                    color: "#000", // Tick text color
+                    color: "#000",
+                    font: {
+                      size: window.innerWidth < 768 ? 10 : 12
+                    }
                   },
                 },
               },
@@ -118,21 +133,12 @@ function TradingViewWidget() {
           />
         </div>
       ) : (
-        <p>Loading chart...</p>
+        <div className="flex items-center justify-center w-full h-[300px] md:h-[400px] lg:h-[600px]">
+          <p className="text-gray-600">Loading chart...</p>
+        </div>
       )}
     </div>
   );
 }
-
-const buttonStyle = {
-  padding: "8px 12px",
-  fontSize: "14px",
-  backgroundColor: "#0052FE",
-  color: "#fff",
-  border: "none",
-  borderRadius: "4px",
-  cursor: "pointer",
-  transition: "background-color 0.3s",
-};
 
 export default memo(TradingViewWidget);
