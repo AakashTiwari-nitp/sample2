@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 const GettingStarted = () => {
   return (
     <>
-      <div className="bg-[#0052FE] px-10 py-5 md:w-[25%] rounded-md my-3 mx-5 flex flex-col items-center">
+      <div className="bg-[#0052FE] px-10 py-5 md:w-[35%] lg:w-[30%] rounded-md my-3 mx-5 flex flex-col items-center">
         <Image
           height={150}
           width={150}
