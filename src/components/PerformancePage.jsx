@@ -55,7 +55,7 @@ function PerformancePage() {
   ];
 
   return (
-    <div className="font-sans p-5 bg-white">
+    <div className="font-sans mx-5 my-2 rounded-md p-5 bg-white">
       {/* Tabs */}
       <div className="w-full border-b border-gray-200">
         {/* Scrollable container for tabs */}

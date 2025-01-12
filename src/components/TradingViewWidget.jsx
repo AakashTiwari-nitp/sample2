@@ -50,7 +50,6 @@ function TradingViewWidget() {
   }, [interval]);
 
   const timeIntervals = [
-    { label: "1 H", value: "1" },
     { label: "24 H", value: "1" },
     { label: "7 D", value: "7" },
     { label: "1 M", value: "30" },
@@ -58,7 +57,7 @@ function TradingViewWidget() {
   ];
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen p-4 md:p-6 bg-white rounded-lg shadow-md">
+    <div className="my-2 mx-5 flex flex-col items-center p-4 md:p-6 bg-white rounded-lg shadow-md">
       {/* Time interval buttons */}
       <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-4 md:mb-6 w-full max-w-2xl">
         {timeIntervals.map((time) => (
