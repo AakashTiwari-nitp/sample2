@@ -57,7 +57,7 @@ function TradingViewWidget() {
   ];
 
   return (
-    <div className="my-2 mx-5 flex flex-col items-center p-4 md:p-6 bg-white rounded-lg shadow-md">
+    <div className="bg-[#fff] rounded-md text-black px-10 py-5 my-3 mx-5 md:w-[70%] mb-5">
       {/* Time interval buttons */}
       <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-4 md:mb-6 w-full max-w-2xl">
         {timeIntervals.map((time) => (

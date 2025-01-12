@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import { FaInfoCircle } from "react-icons/fa";
 
 function PerformancePage() {
   // Example data for the line chart
@@ -54,8 +55,27 @@ function PerformancePage() {
     "Tokenomics",
   ];
 
+  const renderPriceRangeBar = (low, current, high) => {
+    const range = high - low;
+    const position = ((current - low) / range) * 100;
+
+    return (
+      <div className="relative w-full h-2 bg-gradient-to-r from-red-500 via-yellow-400 to-green-500 rounded-full my-2">
+        <div
+          className="absolute top-[-12px] transform -translate-x-1/2"
+          style={{ left: `${position}%` }}
+        >
+          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black mx-auto"></div>
+          <span className="text-sm font-medium whitespace-nowrap">
+            ${current.toLocaleString()}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="font-sans mx-5 my-2 rounded-md p-5 bg-white">
+    <div className="bg-[#fff] rounded-md text-black px-10 py-5 my-3 mx-5 md:w-[70%] mb-5">
       {/* Tabs */}
       <div className="w-full border-b border-gray-200">
         {/* Scrollable container for tabs */}
@@ -83,73 +103,111 @@ function PerformancePage() {
       </div>
 
       {/* Performance Section */}
-      <h2 className="text-2xl font-bold mb-4 text-black">Performance</h2>
-      <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-5">
-        {/* Today's Low and 52W Low */}
-        <div className="flex flex-col w-full space-y-4">
-          {/* Line 1: Today's Low */}
-          <div className="flex flex-col w-full">
-            <div className="flex items-center w-full">
-              <span className="text-gray-600">Today's Low</span>
-            </div>
-            <div className="flex items-center w-full">
-              <span className="ml-2 font-bold text-black">$46,930.22</span>
-              <div className="relative flex-1 mx-4 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 rounded">
-                <span className="absolute top-[-10px] left-[60%] transform -translate-x-1/2 font-bold text-black">
-                  $48,637.83
-                </span>
-              </div>
-            </div>
-          </div>
+      <h2 className="text-xl md:text-2xl font-bold mb-6">Performance</h2>
 
-          {/* Line 2: 52W Low */}
-          <div className="flex flex-col w-full">
-            <div className="flex items-center w-full">
-              <span className="text-gray-600">52W Low</span>
+      <div className="space-y-6 mb-8">
+        {/* Today's Range */}
+        <div className="flex flex-col md:flex-row gap-2 md:gap-8">
+          <div className="flex-1">
+            <div className="flex justify-between mb-1">
+              <span className="text-sm text-gray-500">Today's Low</span>
+              <span className="text-sm text-gray-500">Today's High</span>
             </div>
-            <div className="flex items-center w-full">
-              <span className="ml-2 font-bold text-black">$46,930.22</span>
-              <div className="relative flex-1 mx-4 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 rounded"></div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">$46,930.22</span>
+              {renderPriceRangeBar(46930.22, 48637.83, 49343.83)}
+              <span className="text-sm font-medium">$49,343.83</span>
             </div>
           </div>
         </div>
 
-        {/* High values */}
-        <div className="flex flex-col space-y-4">
-          {/* Today's High */}
-          <div className="flex flex-col">
-            <span className="text-gray-600">Today's High</span>
-            <span className="ml-2 font-bold text-black">$46,930.22</span>
-          </div>
-
-          {/* 52W High */}
-          <div className="flex flex-col">
-            <span className="text-gray-600">52W High</span>
-            <span className="ml-2 font-bold text-black">$46,930.22</span>
+        {/* 52W Range */}
+        <div className="flex flex-col md:flex-row gap-2 md:gap-8">
+          <div className="flex-1">
+            <div className="flex justify-between mb-1">
+              <span className="text-sm text-gray-500">52W Low</span>
+              <span className="text-sm text-gray-500">52W High</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">$16,930.22</span>
+              {renderPriceRangeBar(16930.22, 48637.83, 49743.83)}
+              <span className="text-sm font-medium">$49,743.83</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Fundamentals Section */}
-      <h2 className="text-2xl font-bold mb-4 text-black">Fundamentals</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+      <div className="mb-6 flex items-center gap-2">
+        <h2 className="text-xl md:text-2xl font-bold">Fundamentals</h2>
+        <FaInfoCircle className="text-gray-400" size={16} />
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
         {[
-          { title: "Bitcoin Price", value: "$16,815.46" },
-          { title: "24h Low / 24h High", value: "$16,382.07 / $16,874.12" },
-          { title: "7d Low / 7d High", value: "$16,382.07 / $16,874.12" },
-          { title: "Trading Volume", value: "$23,249,202,782" },
-          { title: "Market Cap", value: "$323,507,290,047" },
-          { title: "Market Cap Rank", value: "#1" },
-          { title: "All-Time High", value: "$69,044.77 (Nov 10, 2021)" },
-          { title: "All-Time Low", value: "$67.81 (Jul 06, 2013)" },
-        ].map((fundamental, idx) => (
-          <div key={idx} className="p-4 border rounded shadow-sm bg-white">
-            <div className="text-sm text-gray-600 border-b pb-1">
-              {fundamental.title}
-            </div>
-            <div className="font-bold text-[#111827] text-lg">
-              {fundamental.value}
-            </div>
+          {
+            label: "Bitcoin Price",
+            value: "$16,815.46",
+          },
+          {
+            label: "24h Low / 24h High",
+            value: "$16,382.07 / $16,874.12",
+          },
+          {
+            label: "7d Low / 7d High",
+            value: "$16,382.07 / $16,874.12",
+          },
+          {
+            label: "Trading Volume",
+            value: "$23,249,202,782",
+          },
+          {
+            label: "Market Cap Rank",
+            value: "#1",
+          },
+          {
+            label: "Market Cap",
+            value: "$323,507,290,047",
+          },
+          {
+            label: "Market Cap Dominance",
+            value: "38.343%",
+          },
+          {
+            label: "Volume / Market Cap",
+            value: "0.0718",
+          },
+          {
+            label: "All-Time High",
+            value: (
+              <div className="flex items-center gap-2">
+                <span>$69,044.77</span>
+                <span className="text-red-500 text-sm">-75.6%</span>
+                <div className="text-sm text-gray-500">
+                  Nov 10, 2021 (about 1 year)
+                </div>
+              </div>
+            ),
+          },
+          {
+            label: "All-Time Low",
+            value: (
+              <div className="flex items-center gap-2">
+                <span>$67.81</span>
+                <span className="text-green-500 text-sm">24729.1%</span>
+                <div className="text-sm text-gray-500">
+                  Jul 06, 2013 (over 9 years)
+                </div>
+              </div>
+            ),
+          },
+        ].map((item, index) => (
+          <div
+            key={index}
+            className="flex justify-between py-3 border-b border-gray-200 last:border-b-0"
+          >
+            <span className="text-sm text-gray-500">{item.label}</span>
+            <div className="text-sm font-medium text-right">{item.value}</div>
           </div>
         ))}
       </div>
